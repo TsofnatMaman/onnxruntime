@@ -771,6 +771,8 @@ class InferenceSession {
                          const Environment& session_env);
   void ConstructorCommon(const SessionOptions& session_options,
                          const Environment& session_env);
+  void InitializeThreadPoolsIfNeeded();
+  bool GraphHasCpuNodes() const;
   [[nodiscard]] common::Status HasInvalidCombinationOfExecutionProviders() const;
   [[nodiscard]] common::Status SaveModelMetadata(const onnxruntime::Model& model);
 
@@ -923,6 +925,8 @@ class InferenceSession {
   // External threadpools.
   onnxruntime::concurrency::ThreadPool* external_intra_op_thread_pool_{};
   onnxruntime::concurrency::ThreadPool* external_inter_op_thread_pool_{};
+
+  void* custom_thread_creation_options_ = nullptr;
 
   // initialized from session options
   // Determines which threadpools will be intialized and used for the duration of this session.
